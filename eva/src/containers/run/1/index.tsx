@@ -1,56 +1,66 @@
 // Interference Test. (60 images)
 import type { FC } from 'react';
-import type { RootState } from '@root/utils/store';
 
-// import * as utils from '@root/utils/app';
-import * as react from 'react';
-import * as redux from 'react-redux';
+import * as hooks from './hooks';
 
 import * as Ant from 'antd';
-import Preview from './preview';
-import Start from './start';
-import Error from './error';
-import Complete from './complete';
+import * as Icons from '@ant-design/icons';
+import Preview from './steps/preview';
+import Start from './steps/start';
+import Complete from './steps/complete';
+// import Error from './steps/error';
 
 
 const Test1Run: FC = () => {
-    const [state, setState] = react.useState<'init' | 'start' | 'complete' | 'error'>('init');
-    const [picked, setPicked] = react.useState<number[]>([]);
-    const [error, setError] = react.useState(0);
+    // Preload
+    const isLoad = hooks.useImagePreload();
+    const state = hooks.useTestState();
+    const items = hooks.useStartItems(state.picked, state.error);
+  
 
-    const store = redux.useSelector((state: RootState) => state.tests.tests[0]);
-
-    if (!store) return <Ant.Empty description="Test Not Found" />;
-
-    const onStart = () => setState('start');
-    const onError = (errorCount: number, pickedCount: number) => {
-        if (store.rules.maxError && errorCount > store.rules.maxError) setState('error');
-    };
-    // const onSuccess = () => setState('complete');
-    const onRestart = () => {
-        setPicked([]);
-        setError(0);
-        setState('start');
-    }
-
-    react.useEffect(() => {
-        onError(error, picked.length)
-    }, [error]);
-
+    if (!isLoad) return (
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 40
+            }}
+        >
+            <Ant.Typography.Text>
+                <Icons.LoadingOutlined
+                    style={{
+                        fontSize: 40
+                    }}
+                />
+            </Ant.Typography.Text>
+        </div>
+    );
 
     return (
         <div>
-            {state === 'init' && <Preview onStart={onStart} />}
-            {state === 'error' && <Error onRestart={onRestart} />}
-            {state === 'complete' && <Complete />}
-            {state === 'start' && (
+            {state.step === 'init' && <Preview onStart={state.onStart} />}
+            {/* {state.step === 'error' && <Error onRestart={() => state.onRestart()} />} */}
+            {state.step === 'complete' && (
+                <Complete 
+                    right={state.picked.length}
+                    error={state.error}
+                    time={state.time}
+                    onRestart={state.onRestart}
+                />
+            )}
+            {state.step === 'start' && (
                 <Start 
-                    // onError={onError} 
-                    // onSuccess={onSuccess}
-                    picked={picked}
-                    setPicked={setPicked}
-                    error={error}
-                    setError={setError}
+                    items={items}
+                    onPick={(item: number) => {
+                        if (state.picked.includes(item))
+                            state.setError(state.error + 1)
+                        else
+                            state.setPicked([
+                                ...state.picked,
+                                item
+                            ])
+                    }}
                 />
             )}
         </div>
