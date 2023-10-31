@@ -31,12 +31,21 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void }> = (prop
                             alignItems: 'center'
                         }}
                     >
-                        <Ant.Row gutter={[4, 4]} style={{ width: '100%', maxWidth: 324 }}>
+                        <Ant.Row gutter={[4, 4]} style={{ width: 624 }}>
                             {props.items.map((item, index) => {
+                                if (item < 0) 
+                                    return (
+                                        <Ant.Col 
+                                            key={`item.${index}`}
+                                            span={4} 
+                                            style={{ height: 96 }}
+                                        />
+                                    );
+                                
                                 return (
                                     <Ant.Col 
                                         key={`item.${index}`}
-                                        span={8} 
+                                        span={4} 
                                         style={{ height: 100 }}
                                     >
                                         <div

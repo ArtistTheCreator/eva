@@ -57,8 +57,8 @@ const Test1Preview: FC<{ onStart: () => void }> = (props) => {
                         <Ant.Descriptions.Item label="Время на выполнение">
                             {store?.rules?.maxTime ? `${store?.rules?.maxTime} секунд`  : 'Не ограничено'}
                         </Ant.Descriptions.Item>
-                        <Ant.Descriptions.Item label="Допустимое количество ошибок">
-                            {store?.rules?.maxError || '0'}
+                        <Ant.Descriptions.Item label="Количество попыток">
+                            {store?.rules?.maxAttempt || '0'}
                         </Ant.Descriptions.Item>
                     </Ant.Descriptions>
                     <Ant.Button

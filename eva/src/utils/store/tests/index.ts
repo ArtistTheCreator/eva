@@ -16,8 +16,8 @@ const initialState = {
             `,
             icon: utils.appLink('/icons/interference.svg'),
             rules: {
-                maxTime: 15 * 60,
-                maxError: 3
+                maxTime: null,
+                maxAttempt: 3
             }
         }
     ] as T.Test[]

@@ -49,7 +49,7 @@ export const useImagePreload = () => {
         return () => {
             isCancelled = true
         }
-      }, [items])
+    }, [])
 
-      return imagesPreloaded;
+    return imagesPreloaded;
 };

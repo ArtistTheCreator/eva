@@ -7,15 +7,17 @@ import * as Ant from 'antd';
 import * as Icons from '@ant-design/icons';
 import Preview from './steps/preview';
 import Start from './steps/start';
-import Complete from './steps/complete';
-// import Error from './steps/error';
+import Attempt from './steps/attempt';
+import Result from './steps/result';
 
 
 const Test1Run: FC = () => {
     // Preload
     const isLoad = hooks.useImagePreload();
-    const state = hooks.useTestState();
-    const items = hooks.useStartItems(state.picked, state.error);
+    const result = hooks.useResult();
+    const stepItems = hooks.useStepItems(result.picked);
+    // const state = hooks.useTestState();
+    // const items = hooks.useStartItems(state.picked, state.error);
   
 
     if (!isLoad) return (
@@ -39,28 +41,25 @@ const Test1Run: FC = () => {
 
     return (
         <div>
-            {state.step === 'init' && <Preview onStart={state.onStart} />}
+            <Attempt
+                open={result.openAttempt}
+                onOk={() => result.onNextAttempt()}
+            />
+            {result.status === 'init' && <Preview onStart={result.onStart} />}
             {/* {state.step === 'error' && <Error onRestart={() => state.onRestart()} />} */}
-            {state.step === 'complete' && (
-                <Complete 
-                    right={state.picked.length}
-                    error={state.error}
-                    time={state.time}
-                    onRestart={state.onRestart}
+            {result.status === 'complete' && (
+                <Result
+                    data={result.result}
+                    // right={0}//state.picked.length}
+                    // error={0}
+                    // time={0}
+                    // onRestart={() => {}}
                 />
             )}
-            {state.step === 'start' && (
+            {result.status === 'start' && (
                 <Start 
-                    items={items}
-                    onPick={(item: number) => {
-                        if (state.picked.includes(item))
-                            state.setError(state.error + 1)
-                        else
-                            state.setPicked([
-                                ...state.picked,
-                                item
-                            ])
-                    }}
+                    items={stepItems}
+                    onPick={result.onPick}
                 />
             )}
         </div>

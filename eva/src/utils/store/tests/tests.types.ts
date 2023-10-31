@@ -5,6 +5,6 @@ export interface Test {
     icon: string | null;
     rules: {
         maxTime: number | null;
-        maxError: number | null;
+        maxAttempt: number | null;
     };
 };
