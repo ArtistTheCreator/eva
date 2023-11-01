@@ -59,6 +59,7 @@ const Test1Run: FC = () => {
             {result.status === 'start' && (
                 <Start
                     open={result.status === 'start'}
+                    onClose={result.onClose}
                     items={stepItems}
                     onPick={result.onPick}
                 />

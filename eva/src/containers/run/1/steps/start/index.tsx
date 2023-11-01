@@ -10,7 +10,7 @@ const ih = 3456;
 const iw = 5184;
 
 
-const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boolean }> = (props) => {
+const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boolean; onClose: () => void; }> = (props) => {
     // const { token } = Ant.theme.useToken();
     const backgrounUrl = utils.appLink(`/interference/background.jpeg`);
     const [height, setHeight] = react.useState<number | string>(0);
@@ -54,6 +54,7 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
     return (
         <Ant.Modal
             open={props.open}
+            onCancel={props.onClose}
             closable={false}
             footer={null}
             centered

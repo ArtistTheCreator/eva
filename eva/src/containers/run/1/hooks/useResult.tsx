@@ -54,6 +54,13 @@ export const useResult = () => {
         picked,
         openAttempt,
         // Action
+        onClose: () => {
+            setStatus('init');
+            setResult([]);
+            setStart(moment());
+            setAttempt(0);
+            setPicked([]);
+        },
         onStart: () => {
             setStatus('start');
             setStart(moment());
