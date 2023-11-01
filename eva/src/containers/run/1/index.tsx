@@ -57,7 +57,8 @@ const Test1Run: FC = () => {
                 />
             )}
             {result.status === 'start' && (
-                <Start 
+                <Start
+                    open={result.status === 'start'}
                     items={stepItems}
                     onPick={result.onPick}
                 />

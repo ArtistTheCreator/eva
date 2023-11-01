@@ -1,75 +1,117 @@
 import type { FC } from 'react';
 
 import * as utils from '@root/utils/app';
+import * as react from 'react';
 
 import * as Ant from 'antd';
 
 
-const TestStart: FC<{ items: number[]; onPick: (item: number) => void }> = (props) => {
+const ih = 3456;
+const iw = 5184;
+
+
+const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boolean }> = (props) => {
     // const { token } = Ant.theme.useToken();
+    const backgrounUrl = utils.appLink(`/interference/background.jpeg`);
+    const [height, setHeight] = react.useState<number | string>(0);
+    const [width, setWidth] = react.useState<number | string>(0);
+    const [itemHeight, setItemHeight] = react.useState<number | string>(0);
+
+    const resize = () => {
+        const h = 0.8 * window.innerHeight;
+        const w = 0.8 * window.innerWidth;
+
+       
+        const w1 = w;
+        const h1 = ih * w / iw;
+
+        if (h1 <= h) {
+            setWidth(w1);
+            setHeight(h1);
+            setItemHeight(0.2 * h1);
+        } else {
+            const h2 = h1 * (h / h1);
+            const w2 = w1 * (h / h1);
+            setWidth(w2);
+            setHeight(h2);
+            setItemHeight(0.2 * h2);
+        }
+       
+    };
+
+    react.useEffect(() => {
+        resize();
+    });
+
+
+    react.useEffect(() => {
+        window.addEventListener('resize', resize);
+        return () => window.removeEventListener('resize', resize);
+    });
+
+
 
     return (
-        <div
-            style={{
-                height: 'calc(100vh - 120px)',
+        <Ant.Modal
+            open={props.open}
+            closable={false}
+            footer={null}
+            centered
+            width={width}
+            styles={{
+                body: {
+                    // padding: 40,
+                    height: height
+                },
+                content: {
+                    padding: 0,
+                    backgroundImage: `url("${backgrounUrl}")`,
+                    // backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '100%, 100%'
+                }
             }}
         >
-            <Ant.Row style={{ height: '100%' }} gutter={[4, 4]}>
-                {/* <Ant.Col span={24}>
-                    <Ant.Space>
-                        <Ant.Button size='small'>
-                            Cancel
-                        </Ant.Button>
-                    </Ant.Space>
-                </Ant.Col> */}
-                <Ant.Col span={24}>
-                    <div
-                        style={{
-                            height: 'calc(100vh - 220px)',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                    >
-                        <Ant.Row gutter={[4, 4]} style={{ width: 624 }}>
-                            {props.items.map((item, index) => {
-                                if (item < 0) 
-                                    return (
-                                        <Ant.Col 
-                                            key={`item.${index}`}
-                                            span={4} 
-                                            style={{ height: 96 }}
-                                        />
-                                    );
-                                
-                                return (
-                                    <Ant.Col 
-                                        key={`item.${index}`}
-                                        span={4} 
-                                        style={{ height: 100 }}
-                                    >
-                                        <div
-                                            style={{
-                                                cursor: 'pointer'
-                                            }}
-                                            onClick={() => {
-                                                props.onPick(item)
-                                            }}
-                                        >
-                                            <img 
-                                                src={utils.appLink(`/interference/${item}.bmp`)}
-                                                height="100px"
-                                                width="100px"
-                                            />
-                                        </div>
-                                    </Ant.Col>
-                                )
-                            })}
-                        </Ant.Row>
-                    </div>
-                </Ant.Col>
+            <Ant.Row style={{ height: '100%' }}>
+                {props.items.map((item, index) => {
+                    if (item < 0) 
+                        return (
+                            <Ant.Col 
+                                key={`item.${index}`}
+                                span={4} 
+                                style={{ height: itemHeight }}
+                            />
+                        );
+                    
+                    return (
+                        <Ant.Col 
+                            key={`item.${index}`}
+                            span={4} 
+                            style={{ 
+                                height: itemHeight,
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <div
+                                style={{
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => {
+                                    props.onPick(item)
+                                }}
+                            >
+                                <img 
+                                    src={utils.appLink(`/interference/${item}.bmp`)}
+                                    height="95%"
+                                    // width="100%"
+                                />
+                            </div>
+                        </Ant.Col>
+                    )
+                })}
             </Ant.Row>
-        </div>
+        </Ant.Modal>
     );
 };
 
