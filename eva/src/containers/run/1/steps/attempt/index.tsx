@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import type { ModalProps } from 'antd';
 
 import * as Ant from 'antd';
 
@@ -7,25 +6,28 @@ import * as Ant from 'antd';
 const Attempt: FC<{ open: boolean; onOk: () => void}> = (props) => {
     return (
         <Ant.Modal
-            title="Неправильный выбор"
+            // title="Неправильный выбор"
             open={props.open}
             okText="Следующая попытка"
+            closable={false}
             onCancel={() => {}}
             footer={null}
             width={400}
             centered
         >
-            <div>
-                <Ant.Button
-                    type="primary"
-                    onClick={props.onOk}
-                    style={{
-                        width: '100%'
-                    }}
-                >
-                    Следующая попытка
-                </Ant.Button>
-            </div>
+            <Ant.Result
+                status="warning"
+                title="Неправильный выбор"
+            />
+            <Ant.Button
+                type="primary"
+                onClick={props.onOk}
+                style={{
+                    width: '100%'
+                }}
+            >
+                Следующая попытка
+            </Ant.Button>
         </Ant.Modal>
     )
 };

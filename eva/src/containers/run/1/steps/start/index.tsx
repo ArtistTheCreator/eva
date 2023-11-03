@@ -16,6 +16,7 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
     const [height, setHeight] = react.useState<number>(0);
     const [width, setWidth] = react.useState<number>(0);
     const [itemHeight, setItemHeight] = react.useState<number>(0);
+    const [itemWidth, setItemWidth] = react.useState<number>(0);
 
     const resize = () => {
         const h = 0.9 * window.innerHeight;
@@ -29,12 +30,14 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
             setWidth(w1);
             setHeight(h1);
             setItemHeight(0.2 * h1);
+            setItemWidth( w1 / 6);
         } else {
             const h2 = h1 * (h / h1);
             const w2 = w1 * (h / h1);
             setWidth(w2);
             setHeight(h2);
             setItemHeight(0.2 * h2);
+            setItemWidth( w2 / 6);
         }
        
     };
@@ -89,7 +92,7 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
                             key={`item.${index}`}
                             span={4} 
                             style={{ 
-                                height: itemHeight - 8,
+                                height: itemHeight,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center'
@@ -105,7 +108,7 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
                             >
                                 <img 
                                     src={utils.appLink(`/interference/${item}.bmp`)}
-                                    height="95%"
+                                    height={(itemHeight > itemWidth ? itemWidth : itemHeight) - 20}
                                     // width="100%"
                                 />
                             </div>
