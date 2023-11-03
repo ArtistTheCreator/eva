@@ -1,0 +1,1 @@
+import{j as t}from"./index-bd781b46.js";import{R as o}from"./index-97a9405f.js";import"./CloseCircleFilled-90205b78.js";const u=()=>t.jsx(o,{status:"404",title:"Page not found."});export{u as default};

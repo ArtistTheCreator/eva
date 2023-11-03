@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useImages } from './useImages';
 
 import { shuffle } from './helpers';
+import { sampleSize } from 'lodash';
 
 
 export const useStepItems = (picked: number[]): number[] => {
@@ -9,43 +10,30 @@ export const useStepItems = (picked: number[]): number[] => {
     const [items, setItems] = useState<number[]>([]);
 
     useEffect(() => {
-        const currLen = 3 + picked.length;
-        const newLen = picked.length > 0 ? 1 : 0;
-        const randomLen = picked.length > 0 ? currLen - 2 : 3;
+        // First Step
+        if (picked.length == 0) {
+            const randomItems = sampleSize(images, 3);
+            const newItems = randomItems.concat(Array.from(Array(27), () => -1));
 
-        let pickedIndex = Math.floor(Math.random() * picked.length);
-        let pickedItem = picked[pickedIndex] || -1;
+            shuffle(newItems);
+            setItems(newItems)
 
-        let unPickedItems = images.filter((item) => !picked.includes(item));
-        let unPickedIndex = Math.floor(Math.random() * unPickedItems.length);
-        let unPickedItem = newLen > 0 ? unPickedItems[unPickedIndex] || -1 : -1;
+            return;
+        };
 
-        let randomItems = Array.from(
-            Array(randomLen),
-            () => {
-                let randomIndex = Math.floor(Math.random() * images.length);
-                return images[randomIndex] || 1
-            }
-        );
+        const unPickedImages = images.filter((item) => !picked.includes(item));
+        const unPickedSize = picked.length > 26 ? 29 : 3 + picked.length - 1;
 
-        console.log({ currLen });
+        const pickedItems = sampleSize(picked, 1);
+        const unPickedItems = sampleSize(unPickedImages, unPickedSize);
+        const zeroItems = Array.from(Array(29 - unPickedSize), () => -1);
 
-        let newItems = [
-            ...randomItems,
-            unPickedItem,
-            pickedItem
-        ]
-            .filter((item) => item > -1)
-            .concat(
-                currLen < 30 
-                ? Array.from(Array(30 - currLen), () => -1)
-                : []
-            );
+        const newItems = pickedItems.concat(unPickedItems).concat(zeroItems);
 
         shuffle(newItems);
         setItems(newItems);
 
-    }, [picked])
+    }, [picked]);
 
     return items;
 };

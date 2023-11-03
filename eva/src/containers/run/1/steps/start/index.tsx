@@ -6,20 +6,20 @@ import * as react from 'react';
 import * as Ant from 'antd';
 
 
-const ih = 3456;
-const iw = 5184;
+const ih = 640;
+const iw = 960;
 
 
 const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boolean; onClose: () => void; }> = (props) => {
     // const { token } = Ant.theme.useToken();
-    const backgrounUrl = utils.appLink(`/interference/background.jpeg`);
-    const [height, setHeight] = react.useState<number | string>(0);
-    const [width, setWidth] = react.useState<number | string>(0);
-    const [itemHeight, setItemHeight] = react.useState<number | string>(0);
+    const backgrounUrl = utils.appLink(`/interference/back.jpg`);
+    const [height, setHeight] = react.useState<number>(0);
+    const [width, setWidth] = react.useState<number>(0);
+    const [itemHeight, setItemHeight] = react.useState<number>(0);
 
     const resize = () => {
-        const h = 0.8 * window.innerHeight;
-        const w = 0.8 * window.innerWidth;
+        const h = 0.9 * window.innerHeight;
+        const w = 0.9 * window.innerWidth;
 
        
         const w1 = w;
@@ -89,9 +89,10 @@ const TestStart: FC<{ items: number[]; onPick: (item: number) => void; open: boo
                             key={`item.${index}`}
                             span={4} 
                             style={{ 
-                                height: itemHeight,
+                                height: itemHeight - 8,
                                 display: 'flex',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}
                         >
                             <div

@@ -32,7 +32,7 @@ export const useImagePreload = () => {
         
             const imagesPromiseList: Promise<any>[] = []
 
-            imagesPromiseList.push(preloadImage(utils.appLink(`/interference/background.jpeg`)))
+            imagesPromiseList.push(preloadImage(utils.appLink(`/interference/back.jpg`)))
             
             for (const i of items) {
                 imagesPromiseList.push(preloadImage(utils.appLink(`/interference/${i}.bmp`)))

@@ -8,8 +8,10 @@ import * as React from 'react';
 import * as Router from 'react-router-dom';
 
 
-const ShareForm: FC = () => {
+const ShareForm: FC<{ onCancel: () => void; data: any }> = (props) => {
+    const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+    // const [error, setError] = React.useState(false);
 
     React.useEffect(() => {
         setSuccess(false)
@@ -26,8 +28,32 @@ const ShareForm: FC = () => {
     return (
         <Ant.Form
             layout="vertical"
-            onFinish={() => {
-                setSuccess(true);
+            onFinish={(values) => {
+                setLoading(true);
+                fetch("https://formsubmit.co/ajax/99f1d048efe8d404ed9bd875c82ec87b", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: "FormSubmit",
+                        message: JSON.stringify({
+                            ...values,
+                            data: props.data
+                        })
+                    })
+                })
+                .then(() => {
+                    setSuccess(true);
+                    setLoading(false);
+                    // setError(false);
+                })
+                .catch(() => {
+                    setSuccess(false);
+                    setLoading(false);
+                    // setError(true);
+                })
             }}
             style={{
                 marginTop: 24
@@ -49,14 +75,11 @@ const ShareForm: FC = () => {
                 name="date"
                 rules={[{ required: true }]}
             >
-                <Ant.DatePicker 
-                    format={'DD.MM.YYYY'}
+                <Ant.Input 
                     placeholder="Формат даты: DD.MM.YYYY"
-                    style={{
-                        width: '100%'
-                    }}
                 />
             </Ant.Form.Item>
+            {/* {error && ()} */}
             <Ant.Form.Item
                 style={{
                     display: 'flex',
@@ -64,12 +87,18 @@ const ShareForm: FC = () => {
                 }}
             >
                 <Ant.Space>
-                    <Ant.Button>
+                    <Ant.Button
+                        loading={loading}
+                        disabled={loading}
+                        onClick={() => props.onCancel()}
+                    >
                         Отмена
                     </Ant.Button>
                     <Ant.Button 
                         type="primary"
                         htmlType="submit"
+                        loading={loading}
+                        disabled={loading || success}
                     >
                         Поделиться
                     </Ant.Button>
@@ -91,7 +120,10 @@ const Result: FC<{ data: Result[] }> = (props) => {
             // centered
             width={800}
         >
-            <ShareForm />
+            <ShareForm
+                data={props.data}
+                onCancel={() => setOpen(false)} 
+            />
         </Ant.Modal>
         <Ant.Row gutter={[24, 24]}>
             <Ant.Col span={24}>
