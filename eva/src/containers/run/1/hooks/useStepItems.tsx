@@ -22,13 +22,13 @@ export const useStepItems = (picked: number[]): number[] => {
         };
 
         const unPickedImages = images.filter((item) => !picked.includes(item));
-        const unPickedSize = picked.length > 26 ? 29 : 3 + picked.length - 1;
+        const unPickedSize = picked.length < 28 ? 3 : 30 - picked.length;
+        const zeroSize = 30 - picked.length - unPickedSize;
 
-        const pickedItems = sampleSize(picked, 1);
         const unPickedItems = sampleSize(unPickedImages, unPickedSize);
-        const zeroItems = Array.from(Array(29 - unPickedSize), () => -1);
+        const zeroItems = Array.from(Array(zeroSize), () => -1);
 
-        const newItems = pickedItems.concat(unPickedItems).concat(zeroItems);
+        const newItems = picked.concat(unPickedItems).concat(zeroItems);
 
         shuffle(newItems);
         setItems(newItems);
