@@ -125,7 +125,27 @@ const Result: FC<{ data: Result[] }> = (props) => {
                 onCancel={() => setOpen(false)} 
             />
         </Ant.Modal>
-        <Ant.Row gutter={[24, 24]}>
+        <Ant.Result 
+            status="success"
+            title="Подздавляем! Тестирование пройдено!"
+            subTitle="Спасибо. Теперь поделитесь результатом, нажав кнопку «Поделиться»"
+            extra={(
+                <Ant.Space>
+                    <Router.Link to={utils.appLink('')}>
+                        <Ant.Button>
+                            Вернуться к списку тестов
+                        </Ant.Button>
+                    </Router.Link>
+                    <Ant.Button 
+                        type="primary"
+                        onClick={() => setOpen(true)}
+                    >
+                        Поделиться результатом
+                    </Ant.Button>
+                </Ant.Space>
+            )}
+        />
+        {/* <Ant.Row gutter={[24, 24]}>
             <Ant.Col span={24}>
                 <Ant.Typography.Title level={5} style={{ margin: 0 }}>
                     Результаты тестирования
@@ -177,7 +197,7 @@ const Result: FC<{ data: Result[] }> = (props) => {
                     </Ant.Space>
                 </div>
             </Ant.Col>
-        </Ant.Row>
+        </Ant.Row> */}
         </>
     )
 };
