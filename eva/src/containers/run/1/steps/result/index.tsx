@@ -8,7 +8,7 @@ import * as React from 'react';
 import * as Router from 'react-router-dom';
 
 
-const ShareForm: FC<{ onCancel: () => void; data: any }> = (props) => {
+const ShareForm: FC<{ onCancel: () => void; data: Result[] }> = (props) => {
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     // const [error, setError] = React.useState(false);
@@ -21,7 +21,7 @@ const ShareForm: FC<{ onCancel: () => void; data: any }> = (props) => {
     if (success) return (
         <Ant.Result 
             status="success"
-            title="Результаты были отправленны!"
+            title="Результаты были отправлены!"
         />
     );
 
@@ -40,8 +40,11 @@ const ShareForm: FC<{ onCancel: () => void; data: any }> = (props) => {
                         name: "FormSubmit",
                         message: JSON.stringify({
                             ...values,
-                            data: props.data
-                        })
+                            data: props.data.map((item) => ({
+                                ...item,
+                                time: item.end.diff(item.start, 'seconds')
+                            }))
+                        }, null, 2)
                     })
                 })
                 .then(() => {
@@ -88,7 +91,7 @@ const ShareForm: FC<{ onCancel: () => void; data: any }> = (props) => {
             >
                 <Ant.Space>
                     <Ant.Button
-                        loading={loading}
+                        // loading={loading}
                         disabled={loading}
                         onClick={() => props.onCancel()}
                     >
