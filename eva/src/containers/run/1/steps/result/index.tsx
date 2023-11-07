@@ -127,7 +127,7 @@ const Result: FC<{ data: Result[] }> = (props) => {
         </Ant.Modal>
         <Ant.Result 
             status="success"
-            title="Подздавляем! Тестирование пройдено!"
+            title="Поздравляем! Тестирование пройдено!"
             subTitle="Спасибо. Теперь поделитесь результатом, нажав кнопку «Поделиться»"
             extra={(
                 <Ant.Space>
